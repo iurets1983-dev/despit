@@ -240,13 +240,24 @@
             hideCallUI();
         }
         
-        function showCallUI(state, user) {
-            let ui = document.getElementById("callUI");
-            if (!ui) {
-                ui = document.createElement("div");
-                ui.id = "callUI";
-                ui.style.cssText = "position:fixed;bottom:20px;right:20px;background:#2f3136;padding:20px;border-radius:12px;z-index:9999;color:white;min-width:250px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.5);";
-                document.body.appendChild(ui);
+                function showCallUI(state, user) {
+            const oldUI = document.getElementById("callUI");
+            if (oldUI) oldUI.remove();
+            
+            const ui = document.createElement("div");
+            ui.id = "callUI";
+            ui.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99999;display:flex;flex-direction:column;justify-content:center;align-items:center;color:white;font-size:20px;";
+            
+            if (state === "outgoing") {
+                ui.innerHTML = `<div style="font-size:60px;margin-bottom:20px;">📞</div><div style="font-size:24px;font-weight:bold;">${user}</div><div style="color:#b9bbbe;margin:20px;">Исходящий звонок...</div><button onclick="endCall()" style="background:#ed4245;color:white;border:none;padding:15px 40px;border-radius:50px;font-size:18px;cursor:pointer;">❌ Отменить</button>`;
+            } else if (state === "incoming") {
+                ui.innerHTML = `<div style="font-size:60px;margin-bottom:20px;">📞</div><div style="font-size:24px;font-weight:bold;">${user}</div><div style="color:#b9bbbe;margin:20px;">Входящий звонок...</div><div style="display:flex;gap:30px;"><button onclick="handleIncomingCall(true)" style="background:#3ba55c;color:white;border:none;padding:15px 40px;border-radius:50px;font-size:18px;cursor:pointer;">✅ Принять</button><button onclick="handleIncomingCall(false)" style="background:#ed4245;color:white;border:none;padding:15px 40px;border-radius:50px;font-size:18px;cursor:pointer;">❌ Отклонить</button></div>`;
+            } else if (state === "active") {
+                ui.innerHTML = `<div style="font-size:60px;margin-bottom:20px;">🔴</div><div style="font-size:24px;font-weight:bold;">${user}</div><div style="color:#3ba55c;margin:20px;">Разговор...</div><button onclick="endCall()" style="background:#ed4245;color:white;border:none;padding:15px 40px;border-radius:50px;font-size:18px;cursor:pointer;">❌ Завершить</button>`;
+            }
+            
+            document.body.appendChild(ui);
+        }
             }
             
             if (state === "outgoing") {
