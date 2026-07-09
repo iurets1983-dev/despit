@@ -279,9 +279,10 @@
             }
         }
         
-        function hideCallUI() {
+                function hideCallUI() {
             const ui = document.getElementById("callUI");
             if (ui) ui.remove();
+            if (window.callAudio) { window.callAudio.pause(); window.callAudio = null; }
         }
         
         async function handleIncomingCall(accepted) {
